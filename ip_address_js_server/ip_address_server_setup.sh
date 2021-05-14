@@ -7,16 +7,15 @@ echo $PROJECT_ROOT
 #install prereqs
 pip3 install flask
 pip3 install python-socketio
-pip3 install Flask-SoketIO
+pip3 install Flask-SocketIO
 pip3 install pyopenssl
 
 sudo rm /etc/systemd/system/ip_address_server.service
 
 #add create script service
 sudo echo "[Unit]"                                      >> /etc/systemd/system/ip_address_server.service
-sudo echo "Description=API Server exposing javascript and json with printer IP addresses"
-                                                        >> /etc/systemd/system/ip_address_server.service
-sudo echo "After=syslog.target network.target electrum.service"                        >> /etc/systemd/system/ip_address_server.service
+sudo echo "Description=API Server exposing javascript and json with printer IP addresses" >> /etc/systemd/system/ip_address_server.service
+sudo echo "After=syslog.target network.target electrum.service"                           >> /etc/systemd/system/ip_address_server.service
 
 sudo echo "[Service]"                                   >> /etc/systemd/system/ip_address_server.service
 sudo echo "ExecStart=/usr/bin/python3 -u server.py"     >> /etc/systemd/system/ip_address_server.service
