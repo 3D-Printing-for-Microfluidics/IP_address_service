@@ -55,7 +55,7 @@ commit = None
 release = "origin/" + release
 cmd = UPDATE_CMD % (src_dir, release, REPO_NAME)
 try:
-    subprocess.run(cmd)
+    subprocess.run(cmd, shell=True)
 except OSError:
     print(cmd)
     print("Update failed")
