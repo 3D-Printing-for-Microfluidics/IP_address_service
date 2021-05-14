@@ -1,4 +1,4 @@
-from subprocess import check_call as run
+from subprocess import run
 import os
 
 RELEASE = "master"  # default release
