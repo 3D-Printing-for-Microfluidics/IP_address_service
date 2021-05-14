@@ -6,7 +6,7 @@ RELEASE = "master"  # default release
 REPO_NAME = "IP_address_service"
 UPDATE_CMD = (  # base command
     'pip install --src="%s" --upgrade -e '
-    "git://github.com/3D-Printing-for-Microfluidics/IP_address_service.git@%s#egg=%s"
+    "git+https://github.com/3D-Printing-for-Microfluidics/IP_address_service.git@%s#egg=%s"
 )
 
 # @command
@@ -47,6 +47,7 @@ UPDATE_CMD = (  # base command
 
 sudo = False
 # src_dir = SRC_DIR
+os.chdir("../..")
 src_dir = os.getcwd()
 release = RELEASE
 commit = None
