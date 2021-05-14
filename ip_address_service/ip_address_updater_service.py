@@ -6,7 +6,7 @@ RELEASE = "master"  # default release
 REPO_NAME = "IP_address_service"
 UPDATE_CMD = (  # base command
     'pip3 install --src="%s" --upgrade -e '
-    "git+https://github.com/3D-Printing-for-Microfluidics/IP_address_service.git@%s#egg=%s"
+    "git+https://github.com/3D-Printing-for-Microfluidics/IP_address_service.git@%s#egg=%s --verbose"
 )
 
 # @command
