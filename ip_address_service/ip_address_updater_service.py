@@ -54,8 +54,9 @@ commit = None
 
 release = "origin/" + release
 cmd = UPDATE_CMD % (src_dir, release, REPO_NAME)
-print(cmd)
 try:
     run(cmd)
 except OSError:
+    print(cmd)
+    print("Update failed")
     pass
