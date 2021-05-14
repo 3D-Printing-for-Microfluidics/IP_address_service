@@ -1,4 +1,4 @@
-import subprocess
+from subprocess import call as run
 import os
 
 RELEASE = "master"  # default release
@@ -55,7 +55,7 @@ commit = None
 release = "origin/" + release
 cmd = UPDATE_CMD % (src_dir, release, REPO_NAME)
 try:
-    subprocess.run(cmd)
+    run(cmd)
 except OSError:
     print(cmd)
     print("Update failed")
