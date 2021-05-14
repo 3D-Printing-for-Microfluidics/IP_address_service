@@ -24,5 +24,5 @@ except OSError:
 
 os.chdir("ip-address-service")
 subprocess.run("rm setup.py", shell=True)
-subprocess.run("rm UNKNOWN.egg-info", shell=True)
-subprocess.run("pip3 uninstall unknown", shell=True)
+subprocess.run("rm -r UNKNOWN.egg-info", shell=True)
+subprocess.run("pip3 uninstall -y unknown", shell=True)
