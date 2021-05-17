@@ -51,23 +51,23 @@ sudo echo "[Install]"                                           >> /etc/systemd/
 sudo echo "WantedBy=multi-user.target"                          >> /etc/systemd/system/ip_address_service.service
 
 echo "Create updater service..."
-# sudo echo "[Unit]"                                              >> /etc/systemd/system/ip_address_updater_service.service
-# sudo echo "Description=Pulls any updates to ip_address_service from github repository."
-#                                                                 >> /etc/systemd/system/ip_address_updater_service.service
-# sudo echo "After=network.target"                                >> /etc/systemd/system/ip_address_updater_service.service
+sudo echo "[Unit]"                                              >> /etc/systemd/system/ip_address_updater_service.service
+sudo echo "Description=Pulls any updates to ip_address_service from github repository."
+                                                                >> /etc/systemd/system/ip_address_updater_service.service
+sudo echo "After=network.target"                                >> /etc/systemd/system/ip_address_updater_service.service
 
-# sudo echo "[Service]"                                           >> /etc/systemd/system/ip_address_updater_service.service
-# sudo echo "ExecStart=/usr/bin/python3 -u ip_address_updater_service.py"    >> /etc/systemd/system/ip_address_updater_service.service
-# sudo echo "ExecStop=/bin/systemctl kill ip_address_updater_service"        >> /etc/systemd/system/ip_address_updater_service.service
-# sudo echo "WorkingDirectory=$PROJECT_ROOT"                      >> /etc/systemd/system/ip_address_updater_service.service
-# sudo echo "StandardOutput=inherit"                              >> /etc/systemd/system/ip_address_updater_service.service
-# sudo echo "StandardError=inherit"                               >> /etc/systemd/system/ip_address_updater_service.service
-# sudo echo "Restart=always"                                      >> /etc/systemd/system/ip_address_updater_service.service
-# sudo echo "RestartSec=86400"                                    >> /etc/systemd/system/ip_address_updater_service.service
-# sudo echo "User=root"                                           >> /etc/systemd/system/ip_address_updater_service.service
+sudo echo "[Service]"                                           >> /etc/systemd/system/ip_address_updater_service.service
+sudo echo "ExecStart=/usr/bin/python3 -u ip_address_updater_service.py"    >> /etc/systemd/system/ip_address_updater_service.service
+sudo echo "ExecStop=/bin/systemctl kill ip_address_updater_service"        >> /etc/systemd/system/ip_address_updater_service.service
+sudo echo "WorkingDirectory=$PROJECT_ROOT"                      >> /etc/systemd/system/ip_address_updater_service.service
+sudo echo "StandardOutput=inherit"                              >> /etc/systemd/system/ip_address_updater_service.service
+sudo echo "StandardError=inherit"                               >> /etc/systemd/system/ip_address_updater_service.service
+sudo echo "Restart=always"                                      >> /etc/systemd/system/ip_address_updater_service.service
+sudo echo "RestartSec=86400"                                    >> /etc/systemd/system/ip_address_updater_service.service
+sudo echo "User=root"                                           >> /etc/systemd/system/ip_address_updater_service.service
 
-# sudo echo "[Install]"                                           >> /etc/systemd/system/ip_address_updater_service.service
-# sudo echo "WantedBy=multi-user.target"                          >> /etc/systemd/system/ip_address_updater_service.service
+sudo echo "[Install]"                                           >> /etc/systemd/system/ip_address_updater_service.service
+sudo echo "WantedBy=multi-user.target"                          >> /etc/systemd/system/ip_address_updater_service.service
 
 echo "Launch services..."
 sudo systemctl daemon-reload
