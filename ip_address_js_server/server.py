@@ -20,6 +20,7 @@ app.config[
 ] = 0  # IMPORTANT disables cacheing of our javascript on requesting computer so printer list will update every time it is requested
 
 socketio = SocketIO()
+# socketio = SocketIO(app)
 socketio.init_app(app)
 
 # creates ip_discovery object
@@ -28,6 +29,7 @@ tables = DeviceTables()
 # A route used for trusting the database
 @app.route("/", methods=["GET"])
 def home():
+    print("Route - home")
     return (
         """<p>Printer server now trusted. Return to wiki for printer information.</p>"""
     )
@@ -36,6 +38,7 @@ def home():
 # A route that returns json list of printers. (Does not work on wiki)
 @app.route("/api", methods=["GET"])
 def api_json():
+    print("Route - api")
     tables.check_all_printer_status()
     return jsonify(tables.printers)
 
@@ -43,6 +46,7 @@ def api_json():
 # A route that returns json list of printers. (Does not work on wiki)
 @app.route("/api/flush", methods=["GET"])
 def api_flush():
+    print("Route - api/flush")
     tables.clear_all_ip_addresses()
     return "Printers flushed"
 
@@ -50,6 +54,7 @@ def api_flush():
 # A route that returns javascript table of printers. (for wiki)
 @app.route("/api/data.js")
 def api_js():
+    print("Route - api/data.js")
     tables.check_all_printer_status()
     tables.check_all_device_status()
     # create new js file with current data
@@ -72,6 +77,7 @@ def api_js():
 
 @socketio.on("register_ip", namespace="/")
 def register_ip(message):
+    print("Socket - register_ip")
     tables.register_ip(message)
 
 
@@ -80,8 +86,9 @@ service_thread = threading.Thread(target=tables.loop)
 service_thread.daemon = True
 service_thread.start()
 
-# app.run(host='0.0.0.0', port=5000) #http server
+# app.run(host="0.0.0.0", port=5000)  # http server
 
-app.run(host="0.0.0.0", port=5000, ssl_context="adhoc")  # https with blank certificate
+app.run(host="0.0.0.0", port=5001, ssl_context="adhoc")  # https with blank certificate
+# socketio.run(app, port=5001)
 
 # app.run('0.0.0.0', port=5000, ssl_context=('/home/pi/Bonjour_3D_printer_discovery/bonjour_js_server/cert.crt', '/home/pi/Bonjour_3D_printer_discovery/bonjour_js_server/key.key')) # https with full certificate (requires password on startup)

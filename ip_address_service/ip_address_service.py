@@ -3,13 +3,16 @@
 import socket
 import fcntl
 import struct
+import urllib3
 import socketio as sio
 from time import sleep
 
 from printer_info import IS_PRINTER, HARDWARE_SERIES, HARDWARE_VERSION
 
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
 SERVER_IP = "10.37.22.47"
-SERVER_PORT = "5000"
+SERVER_PORT = "5001"
 
 
 def get_ip_address():
@@ -43,15 +46,24 @@ info = {
     "version": HARDWARE_VERSION,
 }
 
+# print("Connecting...")
 try:
-    socket = sio.Client()
-    socket.connect("https://{}:{}".format(SERVER_IP, SERVER_PORT), namespaces=["/"])
-
-    socket.emit("register_ip", info, namespace="/")
+    address = "https://{}:{}".format(SERVER_IP, SERVER_PORT)
+    # print(address)
+    socketio = sio.Client(request_timeout=30, ssl_verify=False)
+    socketio.connect(address, namespaces=["/"])
+    # print("Connected")
 
     sleep(2)
 
-    socket.disconnect()
+    # print("Sending message")
+    # print(info)
+    socketio.emit("register_ip", info, namespace="/")
+
+    sleep(2)
+
+    # print("Disconnecting")
+    socketio.disconnect()
 
 except sio.exceptions.ConnectionError:
-    pass
+    print("Connection failed")

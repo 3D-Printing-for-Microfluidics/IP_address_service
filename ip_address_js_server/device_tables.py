@@ -10,7 +10,7 @@ class DeviceTables:
         self.devices = {}
         self.timestamps = {}
 
-    def register_ip(message):
+    def register_ip(self, message):
         type = message["type"]
         name = message["name"]
         address = message["address"]
@@ -28,15 +28,17 @@ class DeviceTables:
                 "version": version,
             }
 
+            print(type)
+
             self.timestamps[name] = time.time()
-            if type == b"nordin_printer":
+            if type == "nordin_printer":
                 self.printers[name] = printerInfo
-                print("PRINTER: {}: {} at {}".format(name, address))
-            elif type == b"nordin_device":
+                print("PRINTER: {} at {}".format(name, address))
+            elif type == "nordin_device":
                 self.devices[name] = printerInfo
-                print("DEVICE: {}: {} at {}".format(name, address))
+                print("DEVICE: {} at {}".format(name, address))
             else:
-                print("NOT ADDED: {}: {} at {}".format(name, address))
+                print("NOT ADDED: {} at {}".format(name, address))
 
     def clear_all_ip_addresses(self):
         self.printers.clear()
