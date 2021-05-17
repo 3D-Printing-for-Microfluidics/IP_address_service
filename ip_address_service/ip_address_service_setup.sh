@@ -38,7 +38,7 @@ sudo echo "Description=Broadcasts this devices IP address, hostname, and hardwar
 sudo echo "After=network.target"                                >> /etc/systemd/system/ip_address_service.service
 
 sudo echo "[Service]"                                           >> /etc/systemd/system/ip_address_service.service
-sudo echo "ExecStart=/usr/bin/python3 -u ip_address_service.py"    >> /etc/systemd/system/ip_address_service.service
+sudo echo "ExecStart=$PROJECT_ROOT/../env/bin/python -u ip_address_service.py"    >> /etc/systemd/system/ip_address_service.service
 sudo echo "ExecStop=/bin/systemctl kill ip_address_service"        >> /etc/systemd/system/ip_address_service.service
 sudo echo "WorkingDirectory=$PROJECT_ROOT"                      >> /etc/systemd/system/ip_address_service.service
 sudo echo "StandardOutput=inherit"                              >> /etc/systemd/system/ip_address_service.service
@@ -57,7 +57,7 @@ sudo echo "Description=Pulls any updates to ip_address_service from github repos
 sudo echo "After=network.target"                                >> /etc/systemd/system/ip_address_updater_service.service
 
 sudo echo "[Service]"                                           >> /etc/systemd/system/ip_address_updater_service.service
-sudo echo "ExecStart=/usr/bin/python3 -u ip_address_updater_service.py"    >> /etc/systemd/system/ip_address_updater_service.service
+sudo echo "ExecStart=$PROJECT_ROOT/../env/bin/python -u ip_address_updater_service.py"    >> /etc/systemd/system/ip_address_updater_service.service
 sudo echo "ExecStop=/bin/systemctl kill ip_address_updater_service"        >> /etc/systemd/system/ip_address_updater_service.service
 sudo echo "WorkingDirectory=$PROJECT_ROOT"                      >> /etc/systemd/system/ip_address_updater_service.service
 sudo echo "StandardOutput=inherit"                              >> /etc/systemd/system/ip_address_updater_service.service
