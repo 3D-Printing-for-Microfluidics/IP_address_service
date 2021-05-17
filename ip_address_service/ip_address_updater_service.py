@@ -22,7 +22,7 @@ except OSError:
     print("Update failed")
     pass
 
-os.chdir("ip-address-service")
-subprocess.run("rm setup.py", shell=True)
-subprocess.run("rm -r UNKNOWN.egg-info", shell=True)
-subprocess.run("pip3 uninstall -y unknown", shell=True)
+# os.chdir("ip-address-service")
+# subprocess.run("rm setup.py", shell=True)
+# subprocess.run("rm -r UNKNOWN.egg-info", shell=True)
+# subprocess.run("pip3 uninstall -y unknown", shell=True)
