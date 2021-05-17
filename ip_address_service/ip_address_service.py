@@ -54,8 +54,6 @@ try:
     socketio.connect(address, namespaces=["/"])
     # print("Connected")
 
-    sleep(2)
-
     # print("Sending message")
     # print(info)
     socketio.emit("register_ip", info, namespace="/")
@@ -64,6 +62,8 @@ try:
 
     # print("Disconnecting")
     socketio.disconnect()
+
+    sleep(600)
 
 except sio.exceptions.ConnectionError:
     print("Connection failed")
