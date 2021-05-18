@@ -88,7 +88,22 @@ service_thread.start()
 
 # app.run(host="0.0.0.0", port=5000)  # http server
 
-app.run(host="0.0.0.0", port=5001, ssl_context="adhoc")  # https with blank certificate
-# socketio.run(app, port=5001)
+# app.run(host="0.0.0.0", port=5001, ssl_context="adhoc")  # https with blank certificate
 
-# app.run('0.0.0.0', port=5000, ssl_context=('/home/pi/Bonjour_3D_printer_discovery/bonjour_js_server/cert.crt', '/home/pi/Bonjour_3D_printer_discovery/bonjour_js_server/key.key')) # https with full certificate (requires password on startup)
+# app.run(
+#     "0.0.0.0",
+#     port=5000,
+#     ssl_context=(
+#         "/home/pi/Bonjour_3D_printer_discovery/bonjour_js_server/cert.crt",
+#         "/home/pi/Bonjour_3D_printer_discovery/bonjour_js_server/key.key",
+#     ),
+# )  # https with full certificate (requires password on startup)
+
+app.run(
+    "0.0.0.0",
+    port=443,
+    ssl_context=(
+        "cert/BundledCert.crt",
+        "cert/nordinip.key",
+    ),
+)  # https with full certificate (requires password on startup)
