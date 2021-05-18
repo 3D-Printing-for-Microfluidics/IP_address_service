@@ -53,7 +53,8 @@ socketio = None
 while True:
     try:
         address = "https://{}".format(SERVER_IP)
-        socketio = sio.Client(request_timeout=30, ssl_verify=False)
+        # socketio = sio.Client(request_timeout=30, ssl_verify=False)
+        socketio = sio.Client(request_timeout=30)
         socketio.connect(address, namespaces=["/"])
 
         # If the server's data was flushed, send it again
