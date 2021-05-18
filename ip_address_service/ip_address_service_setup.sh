@@ -2,8 +2,6 @@
 
 PROJECT_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# echo $PROJECT_ROOT
-
 echo "Create virtual env..."
 if [ ! -d "../env" ]
 then
@@ -63,7 +61,6 @@ sudo echo "WorkingDirectory=$PROJECT_ROOT"                      >> /etc/systemd/
 sudo echo "StandardOutput=inherit"                              >> /etc/systemd/system/ip_address_updater_service.service
 sudo echo "StandardError=inherit"                               >> /etc/systemd/system/ip_address_updater_service.service
 sudo echo "Restart=always"                                      >> /etc/systemd/system/ip_address_updater_service.service
-# sudo echo "RestartSec=86400"                                    >> /etc/systemd/system/ip_address_updater_service.service
 sudo echo "User=root"                                           >> /etc/systemd/system/ip_address_updater_service.service
 
 sudo echo "[Install]"                                           >> /etc/systemd/system/ip_address_updater_service.service

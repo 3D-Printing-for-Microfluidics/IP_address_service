@@ -3,16 +3,17 @@
 import socket
 import fcntl
 import struct
-import urllib3
 import socketio as sio
 from time import sleep
 
 from printer_info import IS_PRINTER, HARDWARE_SERIES, HARDWARE_VERSION
 
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+SERVER_IP = "nordinip.ee.byu.edu"
+# SERVER_PORT is default https port
 
-SERVER_IP = "10.37.22.47"
-SERVER_PORT = "5001"
+"""
+Get my ip address for wireless interface using socket
+"""
 
 
 def get_ip_address():
@@ -26,6 +27,7 @@ def get_ip_address():
             sleep(1)
 
 
+# Get information about device and pack into dictionary
 hostname = socket.gethostname()
 ip_address = get_ip_address()
 port = None
@@ -46,24 +48,27 @@ info = {
     "version": HARDWARE_VERSION,
 }
 
-# print("Connecting...")
-try:
-    address = "https://{}:{}".format(SERVER_IP, SERVER_PORT)
-    # print(address)
-    socketio = sio.Client(request_timeout=30, ssl_verify=False)
-    socketio.connect(address, namespaces=["/"])
-    # print("Connected")
+# Send information to server via socket
+socketio = None
+while True:
+    try:
+        address = "https://{}".format(SERVER_IP)
+        socketio = sio.Client(request_timeout=30, ssl_verify=False)
+        socketio.connect(address, namespaces=["/"])
 
-    # print("Sending message")
-    # print(info)
-    socketio.emit("register_ip", info, namespace="/")
+        # If the server's data was flushed, send it again
+        @socketio.on("flush", namespace="/")
+        def flush():
+            print("Flushed - Sending message")
+            socketio.emit("register_ip", info, namespace="/")
 
-    sleep(2)
+        print("Sending message")
+        socketio.emit("register_ip", info, namespace="/")
 
-    # print("Disconnecting")
-    socketio.disconnect()
+    except sio.exceptions.ConnectionError:
+        print("Connection failed")
 
+    # Wait 10 minutes
     sleep(600)
 
-except sio.exceptions.ConnectionError:
-    print("Connection failed")
+socketio.disconnect()

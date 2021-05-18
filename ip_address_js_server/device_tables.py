@@ -3,12 +3,20 @@ import socket
 from time import sleep
 import time
 
+"""
+This class handles the data tables
+"""
+
 
 class DeviceTables:
     def __init__(self):
         self.printers = {}
         self.devices = {}
         self.timestamps = {}
+
+    """
+    Parses the JSON and adds a device to the correct table
+    """
 
     def register_ip(self, message):
         type = message["type"]
@@ -19,7 +27,6 @@ class DeviceTables:
         version = message["version"]
 
         if "nordin" in type:
-            # add printers to dictionary
             printerInfo = {
                 "address": address,
                 "stat": -1,
@@ -40,10 +47,18 @@ class DeviceTables:
             else:
                 print("NOT ADDED: {} at {}".format(name, address))
 
+    """
+    Flushes all the tables
+    """
+
     def clear_all_ip_addresses(self):
         self.printers.clear()
         self.devices.clear()
         self.timestamps.clear()
+
+    """
+    Removes a single entry from a table
+    """
 
     def unregister_ip_address(self, hostname):
         # try removing as printer
@@ -58,6 +73,11 @@ class DeviceTables:
             pass
         del self.timestamps[name]
         print("Removed: {}".format(hostname))
+
+    """
+    Opens socket to each printer. If it can connect to the IP, the pi is marked as running.
+    If the correct printer port is open, the server is also marked as running.
+    """
 
     def check_all_printer_status(self):
         for printer in list(self.printers):
@@ -88,6 +108,10 @@ class DeviceTables:
                 # print("Port is not open")
                 self.printers[printer]["stat"] = 0
 
+    """
+    Opens socket to each non-printer. If it can connect to the IP, the device is marked as running.
+    """
+
     def check_all_device_status(self):
         for device in list(self.devices):
             a_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -103,17 +127,16 @@ class DeviceTables:
                 # print("Port is not open")
                 self.devices[device]["stat"] = 0
 
-    def loop(self):
-        try:
-            while True:
-                currentTime = time.time()
-                for name in list(self.timestamps):
-                    lastTime = self.timestamps[name]
-                    if currentTime - lastTime > 86400:
-                        self.unregister_ip_address(name)
-                sleep(600)
+    """
+    Runs the main loop every 10 minutes
+    If any device has not been updated in over a day, it is removed from the tables.
+    """
 
-        except KeyboardInterrupt:
-            pass
-        finally:
-            self.clear_all_ip_addresses()
+    def loop(self):
+        while True:
+            currentTime = time.time()
+            for name in list(self.timestamps):
+                lastTime = self.timestamps[name]
+                if currentTime - lastTime > 86400:
+                    self.unregister_ip_address(name)
+            sleep(600)

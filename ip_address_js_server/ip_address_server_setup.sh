@@ -2,9 +2,6 @@
 
 PROJECT_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# echo $PROJECT_ROOT
-
-
 echo "Create virtual env..."
 if [ ! -d "../env" ]
 then
@@ -41,5 +38,5 @@ sudo systemctl enable ip_address_server.service
 
 #print instruction messages
 echo ""
-echo "To use server update the ip address on the project wiki page to this machine's static ip"
+echo "To use server update the ip address on the project wiki page to this machine's static ip or domain name."
 echo "Plese reboot for changes to take effect."
