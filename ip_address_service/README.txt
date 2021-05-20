@@ -1,6 +1,5 @@
 
 ip_address_service broadcasts this devices IP address, hostname, and hardware type to a static ip_address_server. 
-ip_address_updater_service insures that this code remains updated.
 
 To install:
 
