@@ -27,30 +27,31 @@ def get_ip_address():
             sleep(1)
 
 
-# Get information about device and pack into dictionary
-hostname = socket.gethostname()
-ip_address = get_ip_address()
-port = None
-type = ""
-
-if IS_PRINTER:
-    type = "nordin_printer"
-    port = 5000
-else:
-    type = "nordin_device"
-
-info = {
-    "type": type,
-    "name": hostname,
-    "address": ip_address,
-    "port": port,
-    "series": HARDWARE_SERIES,
-    "version": HARDWARE_VERSION,
-}
-
 # Send information to server via socket
 socketio = None
 while True:
+
+    # Get information about device and pack into dictionary
+    hostname = socket.gethostname()
+    ip_address = get_ip_address()
+    port = None
+    type = ""
+
+    if IS_PRINTER:
+        type = "nordin_printer"
+        port = 5000
+    else:
+        type = "nordin_device"
+
+    info = {
+        "type": type,
+        "name": hostname,
+        "address": ip_address,
+        "port": port,
+        "series": HARDWARE_SERIES,
+        "version": HARDWARE_VERSION,
+    }
+
     try:
         address = "https://{}".format(SERVER_IP)
         # socketio = sio.Client(request_timeout=30, ssl_verify=False)
@@ -63,7 +64,7 @@ while True:
             print("Flushed - Sending message")
             socketio.emit("register_ip", info, namespace="/")
 
-        print("Sending message")
+        # print("Sending message")
         socketio.emit("register_ip", info, namespace="/")
 
     except sio.exceptions.ConnectionError:
@@ -72,4 +73,4 @@ while True:
     # Wait 10 minutes
     sleep(600)
 
-socketio.disconnect()
+    socketio.disconnect()
