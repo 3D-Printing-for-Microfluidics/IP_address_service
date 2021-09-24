@@ -2,6 +2,7 @@ from os import name
 import socket
 from time import sleep
 import time
+import threading
 
 """
 This class handles the data tables
@@ -75,89 +76,68 @@ class DeviceTables:
         print("Removed: {}".format(hostname))
 
     """
-    Opens socket to each printer. If it can connect to the IP, the pi is marked as running.
-    If the correct printer port is open, the server is also marked as running.
+    Checks status of each printer. 
     """
 
     def check_all_printer_status(self):
-        self.check_all_status(self.printers)
-        # for printer in list(self.printers):
-        #     a_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        #     a_socket.settimeout(2)
-        #     rpi_port = (self.printers[printer]["address"], 22)
-        #     rpi_up = a_socket.connect_ex(rpi_port)
-        #     a_socket.close()
-
-        #     if rpi_up == 0:
-        #         # print("Port is open")
-        #         a_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        #         a_socket.settimeout(2)
-        #         server_port = (
-        #             self.printers[printer]["address"],
-        #             self.printers[printer]["port"],
-        #         )
-        #         server_up = a_socket.connect_ex(server_port)
-        #         a_socket.close()
-
-        #         if server_up == 0:
-        #             # print("Server is up")
-        #             self.printers[printer]["stat"] = 2
-        #         else:
-        #             # print("Server is down")
-        #             self.printers[printer]["stat"] = 1
-        #     else:
-        #         # print("Port is not open")
-        #         self.printers[printer]["stat"] = 0
+        self.check_list_status(self.printers)
 
     """
-    Opens socket to each non-printer. If it can connect to the IP, the device is marked as running.
+    Checks status of each non-printer device.
     """
 
     def check_all_device_status(self):
-        self.check_all_status(self.devices)
-        # for device in list(self.devices):
-        #     a_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        #     a_socket.settimeout(2)
-        #     rpi_port = (self.devices[device]["address"], 22)
-        #     rpi_up = a_socket.connect_ex(rpi_port)
-        #     a_socket.close()
+        self.check_list_status(self.devices)
 
-        #     if rpi_up == 0:
-        #         # print("Server is up")
-        #         self.devices[device]["stat"] = 2
-        #     else:
-        #         # print("Port is not open")
-        #         self.devices[device]["stat"] = 0
+    """
+    Checks status off each device in list in a thread. All threads are then joined.
+    """
 
-    def check_all_status(self, device_list):
+    def check_list_status(self, device_list):
+        thread_pool = []
         for device in list(device_list):
+            thread = threading.Thread(
+                target=self.check_device, args=(device_list, device)
+            )
+            thread.start()
+            thread_pool.append(thread)
+
+        for thread in thread_pool:
+            thread.join()
+
+    """
+    Opens socket to each device and checks its status. If it can connect to the IP, the pi is marked as running.
+    If the correct printer port is open, the server is also marked as running.
+    """
+
+    def check_device(self, device_list, device):
+        a_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        a_socket.settimeout(2)
+        rpi_port = (device_list[device]["address"], 22)
+        rpi_up = a_socket.connect_ex(rpi_port)
+        a_socket.close()
+
+        if rpi_up == 0:
+            # print("Port is open")
             a_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            a_socket.settimeout(2)
-            rpi_port = (device_list[device]["address"], 22)
-            rpi_up = a_socket.connect_ex(rpi_port)
+            a_socket.settimeout(4)
+            server_port = (
+                device_list[device]["address"],
+                device_list[device]["port"],
+            )
+
+            server_up = a_socket.connect_ex(server_port)
             a_socket.close()
 
-            if rpi_up == 0:
-                # print("Port is open")
-                a_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                a_socket.settimeout(2)
-                server_port = (
-                    device_list[device]["address"],
-                    device_list[device]["port"],
-                )
-
-                server_up = a_socket.connect_ex(server_port)
-                a_socket.close()
-
-                if server_up == 0:
-                    # print("Server is up")
-                    device_list[device]["stat"] = 2
-                else:
-                    # print("Server is down")
-                    device_list[device]["stat"] = 1
+            if server_up == 0:
+                # print("Server is up")
+                device_list[device]["stat"] = 2
             else:
-                # print("Port is not open")
-                device_list[device]["stat"] = 0
+                # print("Server is down")
+                device_list[device]["stat"] = 1
+        else:
+            # print("Port is not open")
+            device_list[device]["stat"] = 0
 
     """
     Runs the main loop every 10 minutes
