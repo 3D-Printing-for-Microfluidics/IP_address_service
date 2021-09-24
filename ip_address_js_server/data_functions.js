@@ -86,12 +86,12 @@ function populateTable(table, header, is_printer, jsonObj) {
             icon.style = "font-size: 16px; color: Red; float:right;";
             icon.textContent = '\u2612';
         }
-        else if (temp.stat == 1) {
+        else if (temp.stat == 1 && is_printer) {
             col1.textContent = "Server Offline";
             icon.style = "font-size: 18px; color: Orange; float:right;";
             icon.textContent = '\u2610';
         }
-        else if (temp.stat == 2) {
+        else if (temp.stat == 2 || (temp.stat == 1 && !is_printer)) {
             col1.textContent = "Online";
             icon.style = "font-size: 16px; color: Green; float:right;";
             icon.textContent = '\u2611';
@@ -105,7 +105,7 @@ function populateTable(table, header, is_printer, jsonObj) {
         //set column contents
         col1.appendChild(icon);
         col2.textContent = object;
-        if (is_printer) {
+        if (is_printer | (!is_printer && temp.stat == 2)) {
             col3.appendChild(a);
         }
         else {

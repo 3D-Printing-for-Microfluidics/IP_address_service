@@ -34,12 +34,11 @@ while True:
     # Get information about device and pack into dictionary
     hostname = socket.gethostname()
     ip_address = get_ip_address()
-    port = None
+    port = 5000
     type = ""
 
     if IS_PRINTER:
         type = "nordin_printer"
-        port = 5000
     else:
         type = "nordin_device"
 
