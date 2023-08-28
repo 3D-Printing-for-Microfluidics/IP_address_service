@@ -69,6 +69,25 @@ def api_js():
     return app.send_static_file("data.js")
 
 
+@app.route("/api/updater_git", methods=["GET"])
+def api_updater_git():
+    print("Route - api/updater_git")
+    with open("updater_git.txt") as infile:
+        return infile.read()
+
+@app.route("/api/slicer_settings.json", methods=["GET"])
+def api_get_slicer_settings():
+    print("Route GET - api/slicer_settings.json")
+    return app.send_static_file("slicer_settings.json")
+
+@app.route("/api/slicer_settings.json", methods=["POST"])
+def api_set_slicer_settings():
+    print("Route POST - api/slicer_settings.json")
+
+    with open("slicer_settings.json", "w") as outfile:
+        outfile.write(request.form['json'])
+
+
 # Called by devices for register
 @socketio.on("register_ip", namespace="/")
 def register_ip(message):
